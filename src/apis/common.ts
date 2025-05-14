@@ -1,4 +1,4 @@
-import { AppItem, Request_PatchAppDeploymentItem, Response_AppDeploymentsHistory, Response_AppList } from "@/types/commonType";
+import { AppDetailInfo, Request_PatchAppDeploymentItem, Response_AppDeploymentsHistory, Response_AppList } from "@/types/commonType";
 import { createServerSideAxiosInstance } from "@/utils/axios";
 import { AxiosResponse } from "axios";
 
@@ -8,7 +8,7 @@ export const processGetAppList = async (): Promise<AxiosResponse<Response_AppLis
     return await serverAxios.get('apps');
 };
 
-export const processGetAppDetail = async (appName: string): Promise<AxiosResponse<AppItem>> => {
+export const processGetAppDetail = async (appName: string): Promise<AxiosResponse<AppDetailInfo>> => {
     const serverAxios = await createServerSideAxiosInstance();
     return await serverAxios.get(`apps/${appName}`);
 };

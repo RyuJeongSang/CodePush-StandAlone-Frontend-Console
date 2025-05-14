@@ -13,6 +13,10 @@ export interface AppItem {
     deployments: string[]
 }
 
+export interface AppDetailInfo {
+    app: AppItem
+}
+
 export interface Response_AppDeploymentsHistory {
     history: HistoryItem[]
 }

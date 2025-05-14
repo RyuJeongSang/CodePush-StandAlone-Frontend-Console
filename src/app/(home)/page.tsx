@@ -1,6 +1,7 @@
 import { processGetAppList } from '@/apis/common';
 import LogoutButton from '@/components/buttons/LogoutButton';
 import { getServerSideServerUrl } from '@/utils/serverStorage';
+import Link from 'next/link';
 
 export default async function Home() {
     // API 호출 예시
@@ -14,17 +15,17 @@ export default async function Home() {
                     <h1 className="text-2xl font-bold">Codepush Front</h1>
                     <LogoutButton />
                 </div>
-                
-                <p>연결된 서버: {await getServerSideServerUrl()}</p>
-                
+
                 <div className="mt-6">
                     <h2 className="text-xl font-semibold mb-2">앱 목록</h2>
                     {apps.apps.length > 0 ? (
                         <ul className="space-y-2">
                             {apps.apps.map((app) => (
-                                <li key={app.name} className="p-3 bg-gray-100 rounded">
-                                    {app.name}
-                                </li>
+                                <Link href={`/${app.name}`} key={app.name} className="block">
+                                    <li key={app.name} className="p-3 bg-gray-100 rounded">
+                                        {app.name}
+                                    </li>
+                                </Link>
                             ))}
                         </ul>
                     ) : (
