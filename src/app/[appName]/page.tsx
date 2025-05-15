@@ -2,8 +2,9 @@ import { processGetAppDetail } from "@/apis/common";
 import HistoryList from "@/app/[appName]/View/HistoryList";
 import Link from "next/link";
 
-const AppDetailPage = async ({ params }: { params: { appName: string } }) => {
-    const { data: appDetailInfo } = await processGetAppDetail(params.appName);
+const AppDetailPage = async ({ params }: { params: Promise<{ appName: string }> }) => {
+    const { appName } = await params;
+    const { data: appDetailInfo } = await processGetAppDetail(appName);
 
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -17,7 +18,7 @@ const AppDetailPage = async ({ params }: { params: { appName: string } }) => {
                     </Link>
                 </div>
                 
-                <HistoryList appName={params.appName} deployments={appDetailInfo.app.deployments} />
+                <HistoryList appName={appName} deployments={appDetailInfo.app.deployments} />
             </div>
         </div>
     );

@@ -28,7 +28,7 @@ const HistoryList = ({ appName, deployments }: HistoryListProps) => {
     useEffect(() => {
         const getHistory = async () => {
             const historyData = await clientGetAppDeploymentsHistory(appName, deployment);
-            setHistoryList(historyData.history);
+            setHistoryList(historyData.history.reverse());
             setPage(1); // 배포 채널 변경시 첫 페이지로 리셋
         }
         getHistory();

@@ -2,6 +2,7 @@
 
 import { HistoryItemType } from "@/types/commonType";
 import { useState } from "react";
+import { Switch } from '@headlessui/react';
 
 interface HistoryItemProps {
     historyItem: HistoryItemType;
@@ -16,11 +17,16 @@ export default function HistoryItem({ historyItem }: HistoryItemProps) {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const onCloseSidebar = () => {
+        setIsSidebarOpen(false);
+        setFormData(historyItem);
+    }
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         console.log('업데이트된 히스토리:', formData);
         // 여기서 API 호출하여 데이터 업데이트
-        setIsSidebarOpen(false);
+        onCloseSidebar();
     };
 
     return (
@@ -34,21 +40,39 @@ export default function HistoryItem({ historyItem }: HistoryItemProps) {
                     <span className="text-sm text-gray-600">{new Date(historyItem.uploadTime).toLocaleString()}</span>
                 </div>
                 <p className="text-gray-700 whitespace-pre-line">{historyItem.description}</p>
-                <div className="mt-2 flex space-x-2">
+                <div className="mt-2 flex space-x-2 justify-between">
                     <span className="px-2 py-1 bg-gray-100 text-xs rounded-full text-gray-600">
                         레이블: {historyItem.label}
                     </span>
+                    <div>
+                        <Switch
+                            checked={!historyItem.isDisabled}
+                            onChange={checked => {
+                                // api 처리
+                            }}
+                            className={`${
+                                !formData.isDisabled ? 'bg-indigo-600' : 'bg-gray-300'
+                            } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
+                        >
+                            <span className="sr-only">활성화 상태 변경</span>
+                            <span
+                                className={`${
+                                    !formData.isDisabled ? 'translate-x-1' : 'translate-x-6'
+                                } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                            />
+                        </Switch>
+                    </div>
                 </div>
             </div>
 
             {/* 사이드바 */}
             {isSidebarOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-10 flex justify-end pointer-events-auto" onClick={() => setIsSidebarOpen(false)}>
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-10 flex justify-end pointer-events-auto" onClick={onCloseSidebar}>
                     <div className="w-96 bg-white h-full overflow-y-auto shadow-xl p-6 animate-slide-in" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-xl font-bold text-indigo-700">히스토리 수정</h2>
                             <button 
-                                onClick={() => setIsSidebarOpen(false)}
+                                onClick={onCloseSidebar}
                                 className="p-2 rounded-full hover:bg-gray-100"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,7 +88,7 @@ export default function HistoryItem({ historyItem }: HistoryItemProps) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">라벨</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">레이블</label>
                                 <input
                                     type="text"
                                     name="label"
@@ -95,10 +119,33 @@ export default function HistoryItem({ historyItem }: HistoryItemProps) {
                                 />
                             </div>
 
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">활성화</label>
+                                <div className="flex items-center">
+                                    <Switch
+                                        checked={!formData.isDisabled}
+                                        onChange={() => setFormData(prev => ({ ...prev, isDisabled: !prev.isDisabled }))}
+                                        className={`${
+                                            !formData.isDisabled ? 'bg-indigo-600' : 'bg-gray-300'
+                                        } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
+                                    >
+                                        <span className="sr-only">활성화 상태 변경</span>
+                                        <span
+                                            className={`${
+                                                !formData.isDisabled ? 'translate-x-1' : 'translate-x-6'
+                                            } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                                        />
+                                    </Switch>
+                                    <span className="ml-3 text-sm text-gray-600">
+                                        {!formData.isDisabled ? '활성화됨' : '비활성화됨'}
+                                    </span>
+                                </div>
+                            </div>
+
                             <div className="flex space-x-4 pt-4">
                                 <button
                                     type="button"
-                                    onClick={() => setIsSidebarOpen(false)}
+                                    onClick={onCloseSidebar}
                                     className="flex-1 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
                                 >
                                     취소
