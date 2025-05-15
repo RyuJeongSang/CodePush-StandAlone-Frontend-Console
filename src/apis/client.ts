@@ -1,8 +1,7 @@
 'use client';
 
 import { AppItem, Request_PatchAppDeploymentItem, Response_AppDeploymentsHistory, Response_AppList } from "@/types/commonType";
-import axiosInstance from "@/utils/axios";
-import { AxiosResponse } from "axios";
+import axiosInstance from "@/utils/clientAxios";
 
 // 클라이언트 전용 API 호출
 export const clientGetAppList = async (): Promise<Response_AppList> => {

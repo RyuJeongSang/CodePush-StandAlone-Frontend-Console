@@ -1,5 +1,5 @@
 import { AppDetailInfo, Request_PatchAppDeploymentItem, Response_AppDeploymentsHistory, Response_AppList } from "@/types/commonType";
-import { createServerSideAxiosInstance } from "@/utils/axios";
+import { createServerSideAxiosInstance } from "@/utils/serverAxios";
 import { AxiosResponse } from "axios";
 
 // SSR 컨텍스트에서의 API 호출 함수들

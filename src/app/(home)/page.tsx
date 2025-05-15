@@ -1,6 +1,5 @@
 import { processGetAppList } from '@/apis/common';
 import LogoutButton from '@/components/buttons/LogoutButton';
-import { getServerSideServerUrl } from '@/utils/serverStorage';
 import Link from 'next/link';
 
 export default async function Home() {

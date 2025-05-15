@@ -1,33 +1,23 @@
-import { processGetAppDeploymentsHistory, processGetAppDetail } from "@/apis/common";
-import HistoryItem from "@/app/[appName]/Child/HistoryItem";
-
+import { processGetAppDetail } from "@/apis/common";
+import HistoryList from "@/app/[appName]/View/HistoryList";
+import Link from "next/link";
 
 const AppDetailPage = async ({ params }: { params: { appName: string } }) => {
     const { data: appDetailInfo } = await processGetAppDetail(params.appName);
-    const { data: appHistoryData } = await processGetAppDeploymentsHistory(params.appName, appDetailInfo.app.deployments[0]);
-
-    const historyItems = appHistoryData.history.reverse();
 
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-4">
             <div className="max-w-7xl mx-auto">
-                <div className="mb-8 bg-white rounded-xl shadow-md p-6">
-                    <h1 className="text-2xl font-bold text-indigo-700 mb-4">{params.appName}</h1>
-                    <div className="flex space-x-4">
-                        <div className="px-4 py-2 bg-indigo-50 rounded-lg text-indigo-700 font-medium">
-                            배포 채널: {appDetailInfo.app.deployments[0]}
-                        </div>
-                    </div>
+                <div className="mb-4">
+                    <Link href="/" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        뒤로가기
+                    </Link>
                 </div>
                 
-                <div className="bg-white rounded-xl shadow-md p-6">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-6">배포 히스토리</h2>
-                    <div className="grid gap-4">
-                        {historyItems.map((history) => (
-                            <HistoryItem key={history.label} historyItem={history} />
-                        ))}
-                    </div>
-                </div>
+                <HistoryList appName={params.appName} deployments={appDetailInfo.app.deployments} />
             </div>
         </div>
     );

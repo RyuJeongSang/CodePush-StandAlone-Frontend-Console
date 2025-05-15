@@ -18,10 +18,10 @@ export interface AppDetailInfo {
 }
 
 export interface Response_AppDeploymentsHistory {
-    history: HistoryItem[]
+    history: HistoryItemType[]
 }
 
-export interface HistoryItem {
+export interface HistoryItemType {
     description: string
     isDisabled: boolean
     isMandatory: boolean

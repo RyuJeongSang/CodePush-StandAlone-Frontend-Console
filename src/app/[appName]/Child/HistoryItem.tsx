@@ -1,9 +1,7 @@
 "use client";
 
-import type { HistoryItem } from "@/types/commonType";
+import { HistoryItemType } from "@/types/commonType";
 import { useState } from "react";
-
-interface HistoryItemType extends HistoryItem {}
 
 interface HistoryItemProps {
     historyItem: HistoryItemType;
