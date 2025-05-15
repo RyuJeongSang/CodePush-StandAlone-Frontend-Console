@@ -22,6 +22,7 @@ export default function Register() {
             new URL(serverUrl);
         } catch (e) {
             setError('유효한 URL을 입력해주세요.');
+            console.log('e', e);
             return;
         }
 

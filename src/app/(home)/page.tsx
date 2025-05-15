@@ -53,6 +53,7 @@ export default async function Home() {
             </div>
         );
     } catch (error) {
+        console.log('error', error);
         return (
             <div className="min-h-screen bg-gray-50 py-8 px-4">
                 <div className="max-w-7xl mx-auto">
