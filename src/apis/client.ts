@@ -39,5 +39,5 @@ export const clientPatchAppDeploymentItem = async (
     if (!axiosInstance) {
         throw new Error('axios 인스턴스가 초기화되지 않았습니다.');
     }
-    await axiosInstance.patch(`apps/${appName}/deployments/${deployment}/release`, param);
+    await axiosInstance.patch(`apps/${appName}/deployments/${deployment}/release`, { packageInfo: param });
 }; 

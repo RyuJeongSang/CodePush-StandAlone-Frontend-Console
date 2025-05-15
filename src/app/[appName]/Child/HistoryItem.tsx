@@ -1,14 +1,18 @@
 "use client";
 
 import { HistoryItemType } from "@/types/commonType";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Switch } from '@headlessui/react';
+import { clientPatchAppDeploymentItem } from "@/apis/client";
 
 interface HistoryItemProps {
     historyItem: HistoryItemType;
+    appName: string;
+    deployment: string;
+    onUpdateSuccess: () => Promise<void>;
 }
 
-export default function HistoryItem({ historyItem }: HistoryItemProps) {
+export default function HistoryItem({ historyItem, appName, deployment, onUpdateSuccess }: HistoryItemProps) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [formData, setFormData] = useState<HistoryItemType>(historyItem);
 
@@ -24,10 +28,28 @@ export default function HistoryItem({ historyItem }: HistoryItemProps) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('업데이트된 히스토리:', formData);
-        // 여기서 API 호출하여 데이터 업데이트
+        processUpdateHistory({ description: formData.description, isDisabled: formData.isDisabled });
         onCloseSidebar();
     };
+
+    useEffect(() => {
+        setFormData(historyItem);
+    }, [historyItem]);
+
+    const processUpdateHistory = async ({ description, isDisabled }: { description?: string, isDisabled?: boolean }) => {
+        try {
+            await clientPatchAppDeploymentItem(appName, deployment, {
+                label: historyItem.label,
+                description: description ?? undefined,
+                isDisabled: isDisabled ?? undefined,
+            });
+            
+            // 업데이트 성공 시 데이터 새로고침
+            await onUpdateSuccess();
+        } catch (error) {
+            console.error('히스토리 업데이트 실패:', error);
+        }
+    }
 
     return (
         <>
@@ -44,20 +66,25 @@ export default function HistoryItem({ historyItem }: HistoryItemProps) {
                     <span className="px-2 py-1 bg-gray-100 text-xs rounded-full text-gray-600">
                         레이블: {historyItem.label}
                     </span>
-                    <div>
+                    <div 
+                        className="pointer-events-auto"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
+                    >
                         <Switch
                             checked={!historyItem.isDisabled}
-                            onChange={checked => {
-                                // api 처리
+                            onChange={(checked) => {
+                                processUpdateHistory({ isDisabled: !checked });
                             }}
                             className={`${
-                                !formData.isDisabled ? 'bg-indigo-600' : 'bg-gray-300'
+                                !historyItem.isDisabled ? 'bg-indigo-600' : 'bg-gray-300'
                             } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
                         >
                             <span className="sr-only">활성화 상태 변경</span>
                             <span
                                 className={`${
-                                    !formData.isDisabled ? 'translate-x-1' : 'translate-x-6'
+                                    !historyItem.isDisabled ? 'translate-x-1' : 'translate-x-6'
                                 } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                             />
                         </Switch>
@@ -89,13 +116,7 @@ export default function HistoryItem({ historyItem }: HistoryItemProps) {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">레이블</label>
-                                <input
-                                    type="text"
-                                    name="label"
-                                    value={formData.label}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                />
+                                <p className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">{formData.label}</p>
                             </div>
 
                             <div>
