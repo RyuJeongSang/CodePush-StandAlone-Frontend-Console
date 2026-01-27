@@ -28,8 +28,8 @@ export function useAuth() {
         setServerUrl(serverUrl);
         setToken(token);
       
-        Cookies.set('serverUrl', serverUrl, { path: '/' });
-        Cookies.set('token', token, { path: '/' });
+        Cookies.set('serverUrl', serverUrl, { path: '/', expires: 365 }); // 365일 후 만료
+        Cookies.set('token', token, { path: '/', expires: 365 }); // 365일 후 만료
       
         setIsAuthenticated(true);
         router.push('/');
