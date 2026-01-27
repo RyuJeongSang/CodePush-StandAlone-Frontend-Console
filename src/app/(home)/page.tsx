@@ -2,6 +2,8 @@ import { processGetAppList } from '@/apis/common';
 import LogoutButton from '@/components/buttons/LogoutButton';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
     try {
         const response = await processGetAppList();

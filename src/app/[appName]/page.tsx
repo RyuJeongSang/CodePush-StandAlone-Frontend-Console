@@ -2,6 +2,8 @@ import { processGetAppDetail } from "@/apis/common";
 import HistoryList from "@/app/[appName]/View/HistoryList";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 const AppDetailPage = async ({ params }: { params: Promise<{ appName: string }> }) => {
     const { appName } = await params;
     const { data: appDetailInfo } = await processGetAppDetail(appName);
